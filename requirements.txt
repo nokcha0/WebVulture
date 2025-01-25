@@ -1,0 +1,7 @@
+beautifulsoup4
+requests
+selenium
+urllib3
+lxml               
+sqlmap
+webdriver-manager
