@@ -10,15 +10,15 @@ export default function InputBox()
 
     return (
         <div className="top-container">
-            <form action={onSubmit} className="modern-form" >
+            <form action={onSubmit} className="input-form" >
             <input
                 type="text"
-                className="modern-input"
+                className="input"
                 placeholder="Enter a URL..."
                 name="website"
             />
-            <button type="submit" className="modern-button">
-                <img src="./src/images/arrowSubmit.png" alt="Submit" className="modern-button-icon" />
+            <button type="submit" className="input-button">
+                <img src="./src/images/arrowSubmit.png" alt="Submit" className="input-button-icon" />
             </button>
             </form>
         </div>
