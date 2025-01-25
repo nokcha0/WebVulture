@@ -187,7 +187,7 @@ if __name__ == "__main__":
     strength = 3
     threads = 10
     flush_session = False
-    dump_db = True
+    dump_db = False
     manual_command = input("Enter manual command: ")
     core(input_url, strength, threads, flush_session, dump_db, manual_command)
 
