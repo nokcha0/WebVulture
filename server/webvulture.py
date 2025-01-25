@@ -8,15 +8,11 @@ injection_log = []
 start_time = 0
 detected_info = {"WEB_SERVER": None, "TECHNOLOGY": None, "DBMS": None}
 
-def core():
+def core(input_url, strength, threads, flush_session, manual_command):
     global start_time
     try:
-        input_url = input("Enter Target URL: ").strip()
-        strength = 3
-        threads = 10
+
         timeout = 10 # Lower -> Fast, less accurate. Higher -> Slow, more accurate
-        flush_session = True
-        manual_command = input("Enter manual command: ")
 
         if strength not in range(1, 6) or threads not in range(1, 11):
             print("Invalid input values")
@@ -128,7 +124,7 @@ def run_sqlmap(url, form, smart, level=5, risk=3, threads=10, referer="", cookie
             --level={level} --risk={risk} --threads={threads} {smart} \
             -v {verbosity} --random-agent --headers=\"Referer: {referer}; \
             Accept-Language: en-US,en;q=0.9\" {cookie} {csrf} \
-            timeout={timeout} \
+            -o \
             {manual_command} "
 
     print(f"Running SQLMap on: {url}\n ")
@@ -180,5 +176,10 @@ def ensure_url_scheme(url):
     return url
 
 if __name__ == "__main__":
-    core()
+    input_url = input("Enter Target URL: ").strip()
+    strength = 3
+    threads = 10
+    flush_session = True
+    manual_command = input("Enter manual command: ")
+    core(input_url, strength, threads, flush_session,manual_command)
 
