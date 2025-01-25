@@ -6,15 +6,15 @@ import React, { useContext } from 'react';
 
 
 export const AttackSlide = (props) => {
-  const { sliderValue, handleSliderChange } = useContext(Context);
+  const { attackValue, handleAttackChange } = useContext(Context);
 
   return (
     <div>
       <Slider
         aria-label="Attack Level"
-        defaultValue={3}
+        defaultValue={1}
         valueLabelDisplay="auto"
-        onChange={handleSliderChange}
+        onChange={handleAttackChange}
         shiftStep={1}
         step={1}
         marks
