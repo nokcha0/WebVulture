@@ -1,5 +1,6 @@
 // SliderContext.js
 import React, { createContext, useState } from 'react';
+import api from "./api.js";
 
 export const Context = createContext();
 
@@ -23,8 +24,24 @@ export const ContextProvider = ({ children }) => {
 
   const handleSend= () => {
     console.log('Button clicked!');
-  };
 
+    api.post('/slider', { value: sliderValue })
+    .then(response => {
+      console.log("Slider value updated on backend:", response.data);
+      setSliderValue(sliderValue); // Update confirmed state locally
+    })
+    .catch(error => {
+      console.error("Error updating slider value:", error);
+    });
+
+    api.post('/submitted', { clicked: true })
+    .then(response => {
+      console.log("Submit state sent to backend:", response.data);
+    })
+    .catch(error => {
+      console.error("Error submitting state:", error);
+    });
+  };
 
   return (
     <Context.Provider

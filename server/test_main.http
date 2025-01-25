@@ -1,14 +1,7 @@
 ###
-# ###: request delimiters
-# Syntax: POST [location specified in @app.post]
-POST http://localhost:8000/fruits
-Content-Type: application/json
-
-{
-    "name": "Pear"
-}
+GET http://localhost:8000/submitted
+Accept: application/json 
 
 ###
-# GET requests can be implemented too:
-GET http://localhost:8000/fruits
-Accept: application/json 
+GET http://localhost:8000/slider
+Accept: application/json
