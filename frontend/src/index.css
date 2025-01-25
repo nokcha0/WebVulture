@@ -1,0 +1,93 @@
+.no-select-text {
+  cursor: default;       
+  user-select: none;   
+}
+
+
+body {
+  margin: 0; 
+  background-color: rgb(37, 37, 31); 
+}
+
+header {
+  display: flex;
+  font-family: 'Fira Sans', sans-serif;
+  height: 60px;
+}
+
+.header-name-1 {
+  color:rgb(220, 222, 195);
+  font-size: 6rem;
+  font-weight: 320;
+  letter-spacing: 25px;
+  margin-left: 50px;
+}
+
+.header-name-2 {
+  color:rgb(220, 222, 195);
+  font-size: 6rem;
+  font-weight: 820;
+  margin-top: -30px;
+  letter-spacing: 25px;
+  opacity: 0.1
+}
+
+
+/*
+.header-logo {
+  max-height: 50px;
+  max-width: 100%; 
+  height: auto; 
+  margin-left: 10px;
+  margin-right: 5px;
+}
+*/
+
+.top-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 2rem;
+
+  margin-top: 100px;
+}
+
+.modern-form {
+  display: flex;
+  align-items: center;
+}
+
+.modern-input {
+  background-color: #0f100f;
+  color: #fff;
+  border: none;
+  outline: none;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  width: 250px;
+  margin-right: 0.5rem; 
+}
+
+
+
+.modern-button {
+  background-color: #0f100f;
+  border: none;
+  padding: 0.6rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.modern-button-icon {
+  filter: invert(1);
+  width: 18px;  
+  height: auto; 
+}
+
+.modern-button:hover {
+  background-color: #7d7c78;
+  transform: scale(1.05);
+}
