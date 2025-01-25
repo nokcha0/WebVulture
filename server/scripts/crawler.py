@@ -41,13 +41,13 @@ query_kw = [
 ]
 
 form_kw = [
+    "user",
     "login",
     "auth",
     "signin",
     "signup",
     "register",
     "account",
-    "user",
     "username",
     "email",
     "password",

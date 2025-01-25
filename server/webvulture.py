@@ -8,36 +8,31 @@ injection_log = []
 start_time = 0
 detected_info = {"WEB_SERVER": None, "TECHNOLOGY": None, "DBMS": None}
 
-def core(input_url, strength, threads, flush_session, manual_command):
+def core(input_url: str, strength: int, threads: bool, flush_session: bool, manual_command: str):
     global start_time
     try:
 
         timeout = 10 # Lower -> Fast, less accurate. Higher -> Slow, more accurate
+        threads = 10 if threads else threads = 1
 
-        if strength not in range(1, 6) or threads not in range(1, 11):
-            print("Invalid input values")
+        if not input_url:
+            print("Enter a valid URL")
             return
+        else: 
+            input_url = ensure_url_scheme(input_url) 
 
-        input_url = ensure_url_scheme(input_url) 
-
-        # Strength Mapping:
-        # Attack Strength | Level | Risk
-        # 1: 1 , 1 | Basic Scanning, Minimal Payloads
-        # 2: 2 , 2 | Slightly more aggressive scanning
-        # 3: 3 , 3 | Balanced Intrusion
-        # 4: 4 , 3 | Aggressive Intrusion
-        # 5: 5 , 3 | Maximum strength, high risk
-
+                                 # Strength Mapping:
+                                 # Attack Strength | Level | Risk
         if strength == 1:
-            level, risk = 1, 1
+            level, risk = 1, 1   # 1: 1 , 1 | Basic Scanning, Minimal Payloads
         elif strength == 2:
-            level, risk = 2, 2
+            level, risk = 2, 2   # 2: 2 , 2 | Slightly more aggressive scanning
         elif strength == 3:
-            level, risk = 3, 3
+            level, risk = 3, 3   # 3: 3 , 3 | Balanced Intrusion
         elif strength == 4:
-            level, risk = 4, 3
+            level, risk = 4, 3   # 4: 4 , 3 | Aggressive Intrusion
         elif strength == 5:
-            level, risk = 5, 3 
+            level, risk = 5, 3   # 5: 5 , 3 | Maximum strength, high risk
 
         print(f"URL given: {input_url}")
         start_time = time.time() 
@@ -57,7 +52,7 @@ def process_targets(input_url, level, risk, threads, timeout, flush_session, man
         print("No vulnerable forms or query parameters found.\n Trying default crawl...")
         referer, cookie, csrf = bot_detection_avoider(input_url)
         manual_command += " --crawl=10 "
-        run_sqlmap(input_url, "--form", "--smart", level, 
+        run_sqlmap(input_url, "--form", "", level, 
                    risk, threads, referer, cookie, csrf, 
                    flush_session, manual_command)
         return
