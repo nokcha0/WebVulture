@@ -9,7 +9,7 @@ injection_log = []
 start_time = 0
 detected_info = {"WEB_SERVER": None, "TECHNOLOGY": None, "DBMS": None}
 
-def core(input_url: str, strength: int, threads: int, flush_session: bool, dump_db: bool, manual_command: str):
+def core(input_url: str, strength: int, threads: int, flush_session: bool, verbose: bool, manual_command: str):
     global start_time
     try:
 
@@ -37,12 +37,12 @@ def core(input_url: str, strength: int, threads: int, flush_session: bool, dump_
 
         print(f"URL given: {input_url}")
         start_time = time.time() 
-        process_targets(input_url, level, risk, threads, timeout, flush_session, dump_db, manual_command)
+        process_targets(input_url, level, risk, threads, timeout, flush_session, verbose, manual_command)
 
     except ValueError:
         print("Invalid input")
 
-def process_targets(input_url, level, risk, threads, timeout, flush_session, dump_db, manual_command):
+def process_targets(input_url, level, risk, threads, timeout, flush_session, verbose, manual_command):
     global injection_found
     global start_time
     global injection_log
@@ -50,8 +50,10 @@ def process_targets(input_url, level, risk, threads, timeout, flush_session, dum
     print(f"\nCrawling and analyzing {input_url} for vulnerabilities...")
     found_urls = crawler(input_url)
 
-    if dump_db:
-        manual_command += " --dump "
+    if verbose:
+        verbosity = 3
+    else:
+        verbosity = 2
 
     if not found_urls["forms"] and not found_urls["queries"]:
         print("No vulnerable forms or query parameters found.\n Trying default crawl...")
@@ -59,7 +61,7 @@ def process_targets(input_url, level, risk, threads, timeout, flush_session, dum
         manual_command += " --crawl=10 "
         run_sqlmap(input_url, "--form", "", level, 
                    risk, threads, referer, cookie, csrf, 
-                   flush_session, manual_command)
+                   flush_session, verbosity, manual_command)
         return
 
     print(f"Detected Form URLs: {found_urls['forms']}")
@@ -73,7 +75,7 @@ def process_targets(input_url, level, risk, threads, timeout, flush_session, dum
         referer, cookie, csrf = bot_detection_avoider(form_url)
         run_sqlmap(form_url, "--form", "--smart", level, 
                    risk, threads, referer, cookie, csrf, 
-                   timeout, flush_session, manual_command)
+                   timeout, flush_session, verbosity, manual_command)
     
     # query 
     for query_url in found_urls["queries"]:
@@ -83,7 +85,7 @@ def process_targets(input_url, level, risk, threads, timeout, flush_session, dum
         referer, cookie, csrf = bot_detection_avoider(query_url)
         run_sqlmap(query_url, "", "", level, 
                    risk, threads, referer, cookie, csrf, 
-                   timeout, flush_session, manual_command)
+                   timeout, flush_session, verbosity, manual_command)
 
     end_time = time.time()  # End measuring time
     elapsed_time = end_time - start_time
@@ -106,7 +108,7 @@ def process_targets(input_url, level, risk, threads, timeout, flush_session, dum
         print("\nNo Vulnerabilities detected.")
 
 def run_sqlmap(url, form, smart, level=5, risk=3, threads=10, referer="", cookie=""
-               , csrf="", timeout=10, flush_session=True, manual_command="", manual=False, verbosity=2):
+               , csrf="", timeout=10, flush_session=True, verbosity=2, manual_command="", manual=False):
     global injection_found
     if injection_found:
         return
@@ -187,7 +189,7 @@ if __name__ == "__main__":
     strength = 3
     threads = 10
     flush_session = False
-    dump_db = False
+    verbose = True
     manual_command = input("Enter manual command: ")
-    core(input_url, strength, threads, flush_session, dump_db, manual_command)
+    core(input_url, strength, threads, flush_session, verbose, manual_command)
 
