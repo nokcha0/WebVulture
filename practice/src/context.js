@@ -58,21 +58,12 @@ export const ContextProvider = ({ children }) => {
   //send button context
   const handleSend= () => {
     console.log('Button clicked!');
-    console.log(attackValue);
-    console.log(threadValue);
-    console.log(isFlushChecked);
-    console.log(isDumpChecked);
-    console.log(urlValue);
-    console.log(cmdValue);
-
-    api.post('/slider', { value: sliderValue })
-    .then(response => {
-      console.log("Slider value updated on backend:", response.data);
-      setSliderValue(sliderValue); // Update confirmed state locally
-    })
-    .catch(error => {
-      console.error("Error updating slider value:", error);
-    });
+    console.log(attackValue); // int
+    console.log(threadValue); // int
+    console.log(isFlushChecked); // bool
+    console.log(isDumpChecked); // bool
+    console.log(urlValue); // str
+    console.log(cmdValue); // str
 
     api.post('/submitted', { clicked: true })
     .then(response => {
@@ -80,6 +71,54 @@ export const ContextProvider = ({ children }) => {
     })
     .catch(error => {
       console.error("Error submitting state:", error);
+    });
+
+    api.post('/attackValue', { value: attackValue })
+    .then(response => {
+      console.log("attackValue updated on backend:", response.data);
+    })
+    .catch(error => {
+      console.error("Error updating attackValue:", error);
+    });
+
+    api.post('/threadValue', { value: threadValue })
+    .then(response => {
+      console.log("threadValue updated on backend:", response.data);
+    })
+    .catch(error => {
+      console.error("Error updating threadValue:", error);
+    });
+    
+    api.post('/isFlushChecked', { toggle: isFlushChecked })
+    .then(response => {
+      console.log("isFlushChecked updated on backend:", response.data);
+    })
+    .catch(error => {
+      console.error("Error updating isFlushChecked:", error);
+    });
+
+    api.post('/isDumpChecked', { toggle: isDumpChecked })
+    .then(response => {
+      console.log("isDumpChecked updated on backend:", response.data);
+    })
+    .catch(error => {
+      console.error("Error updating isDumpChecked:", error);
+    });
+
+    api.post('/urlValue', { text: urlValue })
+    .then(response => {
+      console.log("urlValue updated on backend:", response.data);
+    })
+    .catch(error => {
+      console.error("Error updating urlValue:", error);
+    });
+
+    api.post('/cmdValue', { text: cmdValue })
+    .then(response => {
+      console.log("cmdValue updated on backend:", response.data);
+    })
+    .catch(error => {
+      console.error("Error updating cmdValue:", error);
     });
   };
 
