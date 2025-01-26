@@ -14,7 +14,7 @@ export default function UrlInput() {
         <div >
             <input
                 type="text"
-                className="input"
+                className="input2"
                 placeholder="Enter a URL"
                 value={urlValue}
                 onChange={handleUrlChange}

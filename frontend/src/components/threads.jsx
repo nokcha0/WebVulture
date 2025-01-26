@@ -20,7 +20,7 @@ export const ThreadSlide = (props) => {
         marks
         min={1}
         max={10}
-        sx={{ width: 400, left: 50, height: '10px', borderRadius: '0px',
+        sx={{ width: 400, height: '10px', borderRadius: '0px',
 
         color: '#ff5733', // Change the color of the slider
         '& .MuiSlider-track': {

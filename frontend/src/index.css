@@ -90,6 +90,18 @@ header {
   align-items: center;
 }
 
+.input2 {
+  background-color: #0f100f;
+  color: #fff;
+  border: none;
+  outline: none;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  width: 720px;
+  margin-right: 0.5rem; 
+}
+
 .input {
   background-color: #0f100f;
   color: #fff;
@@ -98,10 +110,9 @@ header {
   padding: 0.75rem 1rem;
   border-radius: 0.25rem;
   font-size: 1rem;
-  width: 250px;
+  width: 260px;
   margin-right: 0.5rem; 
 }
-
 
 
 .input-button {
@@ -137,7 +148,7 @@ header {
   color: rgb(255, 255, 255);
   font-weight: 320;
   font-size: 16px;
-  margin-left: 45px;
+  margin-left: 0px;
   margin-bottom:0px;
 }
 

@@ -13,6 +13,7 @@ export default function Terminal() {
           if (isSubscribed) {
             console.log(`Received event: ${ev.data} ${ev.event}`);
             setMessages((prev) => [...prev, ev.data]);
+            
           }
         },
         onerror(err) {
@@ -26,6 +27,14 @@ export default function Terminal() {
       isSubscribed = false; // Cleanup function to avoid double effects
     };
   }, []);
+  
+  useEffect(() => {
+    // Scroll to the bottom of the terminal body when messages update
+    const terminalBody = document.querySelector(".terminal-body"); // Select the terminal container by class name
+    if (terminalBody) {
+      terminalBody.scrollTop = terminalBody.scrollHeight; // Scroll to the bottom of the container
+    }
+  }, [messages]);
 
   return (
     <div className="terminal-container">
