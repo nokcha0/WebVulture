@@ -17,7 +17,7 @@
 1. create new Terminal
 2. cd .\frontend\
 3. npm install
-4. npm install axios @emotion/react @emotion/styled @mui/material vite
+4. npm install axios @emotion/react @emotion/styled @mui/material @microsoft/fetch-event-source vite 
 5. npm run dev
 6. go to localhost:5173
 
