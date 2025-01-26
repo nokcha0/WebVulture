@@ -14,7 +14,6 @@ def core(input_url: str, strength: int, threads: int, flush_session: bool, verbo
     try:
 
         timeout = 10 # Lower -> Fast, less accurate. Higher -> Slow, more accurate
-        """threads = 10 if threads else 1"""
 
         if not input_url:
             print("Enter a valid URL")
@@ -27,13 +26,13 @@ def core(input_url: str, strength: int, threads: int, flush_session: bool, verbo
         if strength == 1:
             level, risk = 1, 1   # 1: 1 , 1 | Basic Scanning, Minimal Payloads
         elif strength == 2:
-            level, risk = 2, 2   # 2: 2 , 2 | Slightly more aggressive scanning
+            level, risk = 2, 2   # 2: 2 , 2 | Basic Scanning, Moderate Payloads
         elif strength == 3:
             level, risk = 3, 3   # 3: 3 , 3 | Balanced Intrusion
         elif strength == 4:
             level, risk = 4, 3   # 4: 4 , 3 | Aggressive Intrusion
         elif strength == 5:
-            level, risk = 5, 3   # 5: 5 , 3 | Maximum strength, high risk
+            level, risk = 5, 3   # 5: 5 , 3 | Maximum Strength, High Risk
 
         print(f"URL given: {input_url}")
         start_time = time.time() 
