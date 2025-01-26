@@ -1,2 +1,0 @@
-# WebVulture
-McHacks 12 
