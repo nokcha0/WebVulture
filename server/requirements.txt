@@ -4,3 +4,7 @@ pydantic
 requests
 bs4
 selenium
+urllib3
+lxml               
+sqlmap
+webdriver-manager

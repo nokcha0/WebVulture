@@ -16,11 +16,14 @@ class Checkbox(BaseModel):
 class Input(BaseModel):
     text: str
 
+class Summary(BaseModel):
+    contents: dict
+
 app = FastAPI()
 
 # list of websites / endpoints allowed to access the backend
 origins = [
-    "http://localhost:3000"
+    "http://localhost:5173"
 ]
 
 # keep format unless otherwise specified
@@ -34,7 +37,7 @@ app.add_middleware(
 
 # temp non-persistent memory
 memory_db = {"submitted": False, "attackValue": 0, "threadValue": 0, "isFlushChecked": False,
-             "isDumpChecked": False, "urlValue": "", "cmdValue": ""}
+             "isVerboseChecked": False, "urlValue": "", "cmdValue": ""}
 
 @app.get("/submitted", response_model = Button)
 def get_submit():
@@ -52,9 +55,9 @@ def get_thread():
 def get_flush():
     return Checkbox(toggle = memory_db["isFlushChecked"])
 
-@app.get("/isDumpChecked", response_model = Checkbox)
+@app.get("/isVerboseChecked", response_model = Checkbox)
 def get_dump():
-    return Checkbox(toggle = memory_db["isDumpChecked"])
+    return Checkbox(toggle = memory_db["isVerboseChecked"])
 
 @app.get("/urlValue", response_model = Input)
 def get_url():
@@ -63,6 +66,10 @@ def get_url():
 @app.get("/cmdValue", response_model = Input)
 def get_cmd():
     return Input(text = memory_db["cmdValue"])
+
+@app.get("/summary", response_model = Summary)
+def print_summary():
+    return Summary(contents = memory_db)
 
 # response_model: tells Pydantic what format to expect when converting to JSON
 @app.post("/submitted", response_model = Button)
@@ -85,9 +92,9 @@ def post_flush(checkbox: Checkbox):
     memory_db["isFlushChecked"] = checkbox.toggle
     return checkbox
 
-@app.post("/isDumpChecked", response_model = Checkbox)
+@app.post("/isVerboseChecked", response_model = Checkbox)
 def post_dump(checkbox: Checkbox):
-    memory_db["isDumpChecked"] = checkbox.toggle
+    memory_db["isVerboseChecked"] = checkbox.toggle
     return checkbox
 
 @app.post("/urlValue", response_model = Input)

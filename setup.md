@@ -25,6 +25,9 @@ To setup frontend:
 3. Select React, then JS in terminal
 4. .\frontend\ > npm install
 5. npm install axios
+6. npm install @emotion/react @emotion/styled
+7. npm install @mui/material
+8. npm install vite
 
 To connect frontend with backend:
 1. mkdir .\src\components

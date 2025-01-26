@@ -1,7 +1,0 @@
-###
-GET http://localhost:8000/submitted
-Accept: application/json 
-
-###
-GET http://localhost:8000/slider
-Accept: application/json
