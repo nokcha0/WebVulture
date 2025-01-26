@@ -19,7 +19,6 @@ export default function CmdInput() {
                 value={cmdValue}
                 onChange={handleCmdChange}
             />
-            </form>
         </div>
     );
 }
