@@ -8,3 +8,4 @@ urllib3
 lxml               
 sqlmap
 webdriver-manager
+aiohttp

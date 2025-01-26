@@ -1,4 +1,7 @@
-import subprocess, time, os
+import subprocess
+import time
+import os
+import asyncio
 from urllib.parse import urlparse
 from scripts.crawler import *
 from scripts.selenium import *
@@ -9,89 +12,106 @@ injection_log = []
 start_time = 0
 detected_info = {"WEB_SERVER": None, "TECHNOLOGY": None, "DBMS": None}
 
-def core(input_url: str, strength: int, threads: int, flush_session: bool, verbose: bool, manual_command: str):
+async def core(input_url: str, strength: int, threads: int, flush_session: bool, verbose: bool, manual_command: str):
     global start_time
-    try:
+    queue = asyncio.Queue()
 
-        timeout = 10 # Lower -> Fast, less accurate. Higher -> Slow, more accurate
+    try:
+        timeout = 10  # Lower -> Fast, less accurate. Higher -> Slow, more accurate
 
         if not input_url:
-            print("Enter a valid URL")
+            yield "Enter a valid URL"
             return
-        else: 
-            input_url = ensure_url_scheme(input_url) 
+        else:
+            input_url = ensure_url_scheme(input_url)
 
-                                 # Strength Mapping:
-                                 # Attack Strength | Level | Risk
-        if strength == 1:
-            level, risk = 1, 1   # 1: 1 , 1 | Basic Scanning, Minimal Payloads
-        elif strength == 2:
-            level, risk = 2, 2   # 2: 2 , 2 | Basic Scanning, Moderate Payloads
-        elif strength == 3:
-            level, risk = 3, 3   # 3: 3 , 3 | Balanced Intrusion
-        elif strength == 4:
-            level, risk = 4, 3   # 4: 4 , 3 | Aggressive Intrusion
-        elif strength == 5:
-            level, risk = 5, 3   # 5: 5 , 3 | Maximum Strength, High Risk
+        # Strength Mapping
+        strength_mapping = {
+            1: (1, 1),
+            2: (2, 2),
+            3: (3, 3),
+            4: (4, 3),
+            5: (5, 3)
+        }
+        level, risk = strength_mapping.get(strength, (3, 3))
 
-        print(f"URL given: {input_url}")
-        start_time = time.time() 
-        process_targets(input_url, level, risk, threads, timeout, flush_session, verbose, manual_command)
+        yield f"URL given: {input_url}"
+        start_time = time.time()
+
+        async for message in process_targets(input_url, level, risk, threads, timeout, flush_session, verbose, manual_command, queue):
+            yield message
 
     except ValueError:
-        print("Invalid input")
+        yield "Invalid input"
 
-def process_targets(input_url, level, risk, threads, timeout, flush_session, verbose, manual_command):
+async def process_targets(input_url, level, risk, threads, timeout, flush_session, verbose, manual_command, queue):
     global injection_found
     global start_time
     global injection_log
 
-    print(f"\nCrawling and analyzing {input_url} for vulnerabilities...")
-    found_urls = crawler(input_url)
+    await asyncio.sleep(0.1)  # Allow event loop to switch tasks
 
-    if verbose:
-        verbosity = 3
-    else:
-        verbosity = 2
+    yield(f"\nCrawling and analyzing {input_url} for vulnerabilities...")
+
+    # Ensure 'crawler' is awaited and communicates via queue
+    await init_queue(queue)
+    found_urls = await crawler(input_url)
+
+    while not queue.empty():
+        yield await queue.get()
+
+    verbosity = 3 if verbose else 2
 
     if not found_urls["forms"] and not found_urls["queries"]:
-        print("No vulnerable forms or query parameters found.\n Trying default crawl...")
-        referer, cookie, csrf = bot_detection_avoider(input_url)
+        yield("No vulnerable forms or query parameters found.\n Trying default crawl...")
+        await bot_detection_avoider(input_url, queue)
+        
+        while not queue.empty():
+            yield await queue.get()
+        
         manual_command += " --crawl=10 "
-        run_sqlmap(input_url, "--form", "", level, 
-                   risk, threads, referer, cookie, csrf, 
-                   flush_session, verbosity, manual_command)
+        async for result in run_sqlmap(input_url, "--form", "", level, 
+                                       risk, threads, "", "", "", 
+                                       flush_session, verbosity, manual_command):
+            yield result
         return
 
-    print(f"Detected Form URLs: {found_urls['forms']}")
-    print(f"Detected Query URLs: {found_urls['queries']}")
+    yield(f"Detected Form URLs: {found_urls['forms']}")
+    yield(f"Detected Query URLs: {found_urls['queries']}")
 
-    # form
+    # Process forms
     for form_url in found_urls["forms"]:
         if injection_found:
-            break 
+            break
+        await bot_detection_avoider(form_url, queue)
+        
+        while not queue.empty():
+            yield await queue.get()
+        
+        async for result in run_sqlmap(form_url, "--form", "--smart", level, 
+                                       risk, threads, "", "", "", 
+                                       timeout, flush_session, verbosity, manual_command):
+            yield result
 
-        referer, cookie, csrf = bot_detection_avoider(form_url)
-        run_sqlmap(form_url, "--form", "--smart", level, 
-                   risk, threads, referer, cookie, csrf, 
-                   timeout, flush_session, verbosity, manual_command)
-    
-    # query 
+    # Process query params
     for query_url in found_urls["queries"]:
         if injection_found:
-            break 
+            break
+        await bot_detection_avoider(query_url, queue)
+        
+        while not queue.empty():
+            yield await queue.get()
+        
+        async for result in run_sqlmap(query_url, "", "", level, 
+                                       risk, threads, "", "", "", 
+                                       timeout, flush_session, verbosity, manual_command):
+            yield result
 
-        referer, cookie, csrf = bot_detection_avoider(query_url)
-        run_sqlmap(query_url, "", "", level, 
-                   risk, threads, referer, cookie, csrf, 
-                   timeout, flush_session, verbosity, manual_command)
-
-    end_time = time.time()  # End measuring time
-    elapsed_time = end_time - start_time
+    elapsed_time = time.time() - start_time
     minutes, seconds = divmod(int(elapsed_time), 60)
 
     if injection_log:
-        injection_log = simplify_payload(injection_log) 
+        injection_log = simplify_payload(injection_log)
 
         if detected_info: injection_log.append(f"\n=== Extracted Server Information ===\n")
         if detected_info["WEB_SERVER"]: injection_log.append(f"Web Server OS: {detected_info['WEB_SERVER']}")
@@ -99,95 +119,72 @@ def process_targets(input_url, level, risk, threads, timeout, flush_session, ver
         if detected_info["DBMS"]: injection_log.append(f"DBMS Type: {detected_info['DBMS']}")
         injection_log.append(f"\nTotal scan time: {minutes} minutes {seconds} seconds.")
 
-        print("\n==== Vulnerability Found ====\n")
-        print("\n".join(injection_log))
-        print("\n=============================\n")
-
+        for log in injection_log:
+            yield log
     else:
-        print("\nNo Vulnerabilities detected.")
+        yield "\nNo Vulnerabilities detected."
 
-def run_sqlmap(url, form, smart, level=5, risk=3, threads=10, referer="", cookie=""
-               , csrf="", timeout=10, flush_session=True, verbosity=2, manual_command="", manual=False):
+
+async def run_sqlmap(url, form, smart, level=5, risk=3, threads=10, referer="", cookie="",
+                     csrf="", timeout=10, flush_session=True, verbosity=2, manual_command="", manual=False):
     global injection_found
     if injection_found:
         return
-    
+
     manual = "" if manual else "--batch"
     cookie = f'--cookie="{cookie}"' if cookie else ""
     csrf = f'--csrf-token={csrf}' if csrf else ""
     flush_session = "--flush-session" if flush_session else ""
     referer = referer or url
 
-    if os.name == 'nt':  # Windows
-        python_unbuffered = "set PYTHONUNBUFFERED=1 &&"
-    else:  # Linux/Mac
-        python_unbuffered = "PYTHONUNBUFFERED=1"
+    python_unbuffered = "set PYTHONUNBUFFERED=1 &&" if os.name == 'nt' else "PYTHONUNBUFFERED=1"
 
     command = f"{python_unbuffered} sqlmap {flush_session} -u \"{url}\" {manual} {form} \
             --level={level} --risk={risk} --threads={threads} {smart} \
             -v {verbosity} --random-agent --headers=\"Referer: {referer}; \
             Accept-Language: en-US,en;q=0.9\" {cookie} {csrf} \
-            -o \
-            {manual_command} "
+            -o {manual_command}"
 
-    print(f"Running SQLMap on: {url}\n ")
+    yield f"Running SQLMap on: {url}\n"
 
     capturing = False
     second_hyphens = False
     suppress_output = False
-    potential_DBMS = ""
 
-    with subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1) as process:
-        for line in iter(process.stdout.readline, ''):
-            if "___" in line:
-                suppress_output = True
-                continue
-            if any(keyword in line for keyword in ["[*]", "[PAYLOAD]", "[INFO]", "[DEBUG]", "[WARNING]"]):
-                suppress_output = False
-            if  suppress_output: 
-                continue
-            print(line, end='', flush=True)  
+    process = await asyncio.create_subprocess_shell(
+        command, shell=True, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.STDOUT
+    )
 
-            if capturing:
-                if "---" in line and not second_hyphens:
-                    injection_found = True
-                    second_hyphens = True
-                    injection_log.append(f"Exploitable URL: {url}\n")
-                elif "---" in line and second_hyphens:
-                    capturing = False
-                else:
-                    injection_log.append(line.strip())
+    async for line in process.stdout:
+        line = line.decode().strip()
 
-            if any(keyword in line for keyword in ["identified the following injection", "resumed the following injection point(s)"]): 
-                capturing = True
+        if "___" in line:
+            suppress_output = True
+            continue
+        if any(keyword in line for keyword in ["[*]", "[PAYLOAD]", "[INFO]", "[DEBUG]", "[WARNING]"]):
+            suppress_output = False
+        if suppress_output:
+            continue
+        yield line
 
-            if "back-end DBMS could be " in line:
-                potential_DBMS = line.split("back-end DBMS could be '")[1].split("'")[0]
-            elif "web server operating system" in line:
-                detected_info["WEB_SERVER"] = line.split(": ", 1)[1].strip() if ": " in line else line.strip()
-            elif "web application technology" in line:
-                detected_info["TECHNOLOGY"] = line.split(": ", 1)[1].strip() if ": " in line else line.strip()
-            elif "back-end dbms" in line:
-                detected_info["DBMS"] = line.split(": ", 1)[1].strip() if ": " in line else line.strip()
-            elif "the back-end DBMS is" in line:
-                detected_info["DBMS"] = line.split("the back-end DBMS is", 1)[1].strip()
-    
-        process.stdout.close()
-        process.wait()
+        if capturing:
+            if "---" in line and not second_hyphens:
+                injection_found = True
+                second_hyphens = True
+                injection_log.append(f"Exploitable URL: {url}\n")
+            elif "---" in line and second_hyphens:
+                capturing = False
+            else:
+                injection_log.append(line.strip())
 
-    print(f"\nScan for {url} completed.")
+        if any(keyword in line for keyword in ["identified the following injection", "resumed the following injection point(s)"]): 
+            capturing = True
+
+    await process.wait()
+    yield f"\nScan for {url} completed."
 
 def ensure_url_scheme(url):
     parsed_url = urlparse(url)
     if not parsed_url.scheme:
         return f"http://{url}"
     return url
-
-if __name__ == "__main__":
-    input_url = input("Enter Target URL: ").strip()
-    strength = 3
-    threads = 10
-    flush_session = False
-    verbose = True
-    manual_command = input("Enter manual command: ")
-    core(input_url, strength, threads, flush_session, verbose, manual_command)

@@ -1,65 +1,47 @@
-import sys
+import asyncio
 from selenium import webdriver
 from selenium.webdriver import ChromeOptions
 from selenium.common.exceptions import WebDriverException, TimeoutException
 
-def bot_detection_avoider(url):
+async def bot_detection_avoider(url, queue):
     try:
         chrome_options = ChromeOptions()
-        chrome_options.add_argument("--headless")  # Run headless
+        chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--disable-software-rasterizer")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--ignore-certificate-errors")  # Ignore SSL errors
-        chrome_options.add_argument("--allow-running-insecure-content")  # Allow mixed content
-        chrome_options.add_argument("--disable-blink-features=AutomationControlled")  # Bypass bot detection
+        chrome_options.add_argument("--ignore-certificate-errors")
+        chrome_options.add_argument("--allow-running-insecure-content")
+        chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 
         driver = webdriver.Chrome(options=chrome_options)
 
         try:
             driver.get(url)
         except TimeoutException:
-            print(f"Error: The URL '{url}' took too long to respond.")
+            await queue.put({"error": f"Error: The URL '{url}' took too long to respond."})
             driver.quit()
-            sys.exit(1)
+            return
         except WebDriverException:
-            print(f"Error: The URL '{url}' is invalid or not accessible.")
+            await queue.put({"error": f"Error: The URL '{url}' is invalid or not accessible."})
             driver.quit()
-            sys.exit(1)
+            return
 
-        # Get referer
-        referer = str(driver.execute_script("return document.referrer;"))
-        if not referer:
-            print("Referer could not be obtained, using the provided URL.")
-            referer = url
-        else:
-            print("Referer obtained:", referer)
+        referer = str(driver.execute_script("return document.referrer;")) or url
+        await queue.put({"message": f"Referer obtained: {referer}"})
 
-        # Get cookies
         cookies = driver.get_cookies()
-        cookie = "; ".join([f"{c['name']}={c['value']}" for c in cookies])
+        cookie = "; ".join([f"{c['name']}={c['value']}" for c in cookies]) or "No cookies found."
+        await queue.put({"message": f"Cookies obtained: {cookie}"})
 
-        if cookie:
-            print("Cookies obtained:", cookie)
-        else:
-            print("No cookies found.")
-
-        # Extract CSRF token
-        csrf = driver.execute_script("""
-            return document.querySelector('input[name="csrf_token"], meta[name="csrf-token"]')?.getAttribute('content');
-        """) or ""
-
-        if csrf:
-            print("CSRF Token obtained:", csrf)
-        else:
-            print("CSRF Token could not be obtained.")
+        csrf = driver.execute_script("""return document.querySelector('input[name="csrf_token"], meta[name="csrf-token"]')?.getAttribute('content');""") or "No CSRF token found."
+        await queue.put({"message": f"CSRF Token obtained: {csrf}"})
 
         driver.quit()
-        return referer, cookie, csrf
+        await queue.put({"result": (referer, cookie, csrf)})
 
     except WebDriverException as e:
-        print(f"WebDriver error: {e}")
-        sys.exit(1)
+        await queue.put({"error": f"WebDriver error: {e}"})
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-        sys.exit(1)
+        await queue.put({"error": f"An unexpected error occurred: {e}"})
