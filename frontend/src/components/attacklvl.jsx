@@ -1,26 +1,25 @@
 
-import '../App.css';
 import Slider from '@mui/material/Slider';
 
 import { Context } from '../context';
 import React, { useContext } from 'react';
 
 
-export const ThreadSlide = (props) => {
-  const { threadValue, handleThreadChange } = useContext(Context);
+export const AttackSlide = (props) => {
+  const { attackValue, handleAttackChange } = useContext(Context);
 
   return (
     <div>
       <Slider
-        aria-label="Number of Threads"
+        aria-label="Attack Level"
         defaultValue={1}
         valueLabelDisplay="auto"
-        onChange={handleThreadChange}
+        onChange={handleAttackChange}
         shiftStep={1}
         step={1}
         marks
         min={1}
-        max={10}
+        max={5}
         sx={{ width: 300, left: 50, height: '10px', borderRadius: '0px',
 
         color: '#ff5733', // Change the color of the slider
@@ -51,4 +50,4 @@ export const ThreadSlide = (props) => {
   );
 };
 
-export default ThreadSlide
+export default AttackSlide
