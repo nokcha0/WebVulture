@@ -20,3 +20,11 @@
 4. npm install axios @emotion/react @emotion/styled @mui/material vite
 5. npm run dev
 6. go to localhost:5173
+
+-- TESTING --
+Test Websites
+
+http://testphp.vulnweb.com/index.php
+http://altoro.testfire.net/
+http://testasp.vulnweb.com/
+

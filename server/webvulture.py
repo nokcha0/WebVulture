@@ -94,9 +94,9 @@ def process_targets(input_url, level, risk, threads, timeout, flush_session, ver
         injection_log = simplify_payload(injection_log) 
 
         if detected_info: injection_log.append(f"\n=== Extracted Server Information ===\n")
-        if detected_info["WEB_SERVER"]: injection_log.append(f"Web Server OS: {detected_info["WEB_SERVER"]}")
-        if detected_info["TECHNOLOGY"]: injection_log.append(f"Web App Tech: {detected_info["TECHNOLOGY"]}")
-        if detected_info["DBMS"]: injection_log.append(f"DBMS Type: {detected_info["DBMS"]}")
+        if detected_info["WEB_SERVER"]: injection_log.append(f"Web Server OS: {detected_info['WEB_SERVER']}")
+        if detected_info["TECHNOLOGY"]: injection_log.append(f"Web App Tech: {detected_info['TECHNOLOGY']}")
+        if detected_info["DBMS"]: injection_log.append(f"DBMS Type: {detected_info['DBMS']}")
         injection_log.append(f"\nTotal scan time: {minutes} minutes {seconds} seconds.")
 
         print("\n==== Vulnerability Found ====\n")
