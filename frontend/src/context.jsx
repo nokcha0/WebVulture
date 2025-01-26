@@ -1,5 +1,6 @@
 // context.jsx
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useRef } from 'react';
+
 
 export const Context = createContext();
 
@@ -55,7 +56,11 @@ export const ContextProvider = ({ children }) => {
 
 
   //send button context
+  const bottomRef = useRef(null);
+
   const handleSend= () => {
+
+
     console.log('Button clicked!');
     console.log(attackValue);
     console.log(threadValue);

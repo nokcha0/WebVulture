@@ -68,6 +68,10 @@ export const AttackSlide = (props) => {
         '& .MuiSlider-mark': {
       display: 'none', // Hide the discrete marker dots
         },
+        
+        '& .MuiSlider-thumb:focus, & .MuiSlider-thumb:active': {
+      outline: 'none', // Remove outline when the thumb is focused or active (clicked)
+    }
          }}
       />
     </div>

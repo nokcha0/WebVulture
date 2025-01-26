@@ -1,5 +1,14 @@
+import { useState } from 'react';
 
 export default function Footer() {
+  const [isVisible, setIsVisible] = useState(true);
+
+  if (!isVisible) return null;
+
+  const handleClose = () => {
+    setIsVisible(false);
+  };
+
   return (
     <footer className="disclaimer-footer">
       <p className="disclaimer-title">Disclaimer</p>
@@ -14,6 +23,7 @@ export default function Footer() {
         this site are not liable for any misuse or damage resulting from
         the information or tools provided.
       </p>
+      <button className="close-btn" onClick={handleClose}>Close</button>
     </footer>
   );
 }
