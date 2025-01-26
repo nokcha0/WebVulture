@@ -114,11 +114,11 @@ async def process_targets(input_url, level, risk, threads, timeout, flush_sessio
         yield("==== Vulnerability Found ====\n")
         injection_log = simplify_payload(injection_log)
 
-        if detected_info: injection_log.append(f"=== Extracted Server Information ===\n")
+        if detected_info: injection_log.append(f"=== Extracted Server Information ===\n\n")
         if detected_info["WEB_SERVER"]: injection_log.append(f"Web Server OS: {detected_info['WEB_SERVER']}")
         if detected_info["TECHNOLOGY"]: injection_log.append(f"Web App Tech: {detected_info['TECHNOLOGY']}")
         if detected_info["DBMS"]: injection_log.append(f"DBMS Type: {detected_info['DBMS']}")
-        injection_log.append(f"\nTotal scan time: {minutes} minutes {seconds} seconds.")
+        injection_log.append(f"Total scan time: {minutes} minutes {seconds} seconds.\n")
 
         for log in injection_log:
             yield log
