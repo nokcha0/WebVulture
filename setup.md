@@ -1,41 +1,25 @@
--- BACKEND --
-Before executing the backend Python script (main.py):
-1. .\server > .\venv\Scripts\activate (activates venv: virtual environment)
-2. pip install -r .\requirements.txt (makes sure all dependencies in requirements.txt are present in venv)
+-- SETTING UP THE BACKEND --
+1. cd .\server\
+2. python -m venv venv
+3. .\venv\Scripts\activate
 
-Include all required dependencies / libraries in requirements.txt
+    Double-check venv:
+    1. Ctrl + Shift + P
+    2. Search "Python: Select Interpreter"
+    3. "Enter interpreter path..." -> "Find..."
+    4. Select server -> venv -> Scripts -> python
 
-If VSCode does not detect venv:
-1. Ctrl + Shift + P
-2. Search "Python: Select Interpreter"
-3. "Enter interpreter path..." -> "Find..."
-4. Select ./backend/venv/Scripts/python
+4. pip install -r .\requirements.txt
+5. python .\main.py
+6. go to localhost:8000
 
-To run Uvicorn server:
-1. (venv) .\backend > python .\main.py
-
-To test:
-1. GET endpoint: go to localhost:8000/[location specified in @app.get]
-2. POST endpoint: use the REST Client extension, write a .http file, see format in example file
-
--- FRONTEND --
-To setup frontend:
-1. Make sure Node.js is installed (may require restart)
-2. . > npm create vite@latest frontend --template react
-3. Select React, then JS in terminal
-4. .\frontend\ > npm install
-5. npm install axios
-6. npm install @emotion/react @emotion/styled
-7. npm install @mui/material
-8. npm install vite
-
-To connect frontend with backend:
-1. mkdir .\src\components
-2. touch .\src\api.js
-3. See code in api.js: to change backend, simply change address indicated in api.js
-4. Setup relevant components file calling the API (see examples)
-
-To run frontend:
-1. .\frontend > npm run dev
-2. Make sure displayed port matches ports in origins in backend main.py
-3. Reload backend server if needed
+-- SETTING UP THE FRONTEND --
+1. create new Terminal
+2. cd .\frontend\
+3. npm install
+4. npm install axios 
+5. npm install @emotion/react @emotion/styled 
+6. npm install @mui/material 
+7. npm install vite
+8. npm run dev
+9. go to localhost:5173
