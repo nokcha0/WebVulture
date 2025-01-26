@@ -1,6 +1,6 @@
 // context.jsx
 import React, { createContext, useState } from 'react';
-
+import api from "./api.js";
 export const Context = createContext();
 
 export const ContextProvider = ({ children }) => {
@@ -63,6 +63,62 @@ export const ContextProvider = ({ children }) => {
     console.log(isVerboseChecked);
     console.log(urlValue);
     console.log(cmdValue);
+
+    api.post('/submitted', { clicked: true })
+    .then(response => {
+      console.log("Submit state sent to backend:", response.data);
+    })
+    .catch(error => {
+      console.error("Error submitting state:", error);
+    });
+
+    api.post('/attackValue', { value: attackValue })
+    .then(response => {
+      console.log("attackValue updated on backend:", response.data);
+    })
+    .catch(error => {
+      console.error("Error updating attackValue:", error);
+    });
+
+    api.post('/threadValue', { value: threadValue })
+    .then(response => {
+      console.log("threadValue updated on backend:", response.data);
+    })
+    .catch(error => {
+      console.error("Error updating threadValue:", error);
+    });
+    
+    api.post('/isFlushChecked', { toggle: isFlushChecked })
+    .then(response => {
+      console.log("isFlushChecked updated on backend:", response.data);
+    })
+    .catch(error => {
+      console.error("Error updating isFlushChecked:", error);
+    });
+
+    api.post('/isVerboseChecked', { toggle: isVerboseChecked })
+    .then(response => {
+      console.log("isVerboseChecked updated on backend:", response.data);
+    })
+    .catch(error => {
+      console.error("Error updating isVerboseChecked:", error);
+    });
+
+    api.post('/urlValue', { text: urlValue })
+    .then(response => {
+      console.log("urlValue updated on backend:", response.data);
+    })
+    .catch(error => {
+      console.error("Error updating urlValue:", error);
+    });
+
+    api.post('/cmdValue', { text: cmdValue })
+    .then(response => {
+      console.log("cmdValue updated on backend:", response.data);
+    })
+    .catch(error => {
+      console.error("Error updating cmdValue:", error);
+    });
   };
 
 
