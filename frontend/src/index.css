@@ -103,6 +103,27 @@ header {
   transform: scale(1.05);
 }
 
+.all-forms {
+  display: flex;
+  margin-top: 50px;
+  justify-content: center;
+  align-content: center;
+  gap: 100px;
+}
+
+.slide-container{
+  display: flex;
+  flex-direction: column;
+}
+
+.check-container{
+  display: flex;
+  flex-direction: column;
+}
+
+.manual-input {
+  margin-top: 20px;
+}
 .page {
   display: flex;
   align-items: center;

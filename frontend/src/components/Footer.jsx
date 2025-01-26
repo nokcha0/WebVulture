@@ -1,5 +1,5 @@
 
-export default function DisclaimerFooter() {
+export default function Footer() {
   return (
     <footer className="disclaimer-footer">
       <p className="disclaimer-title">Disclaimer</p>

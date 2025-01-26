@@ -10,8 +10,8 @@ export default function CmdInput() {
   const { cmdValue, handleCmdChange } = useContext(Context);
 
     return (
-        <div className="top-container">
-            <form className="modern-form" >
+        <div className="manual-input">
+
             <input
                 type="text"
                 className="modern-input"
@@ -19,7 +19,6 @@ export default function CmdInput() {
                 value={cmdValue}
                 onChange={handleCmdChange}
             />
-            </form>
         </div>
     );
 }
