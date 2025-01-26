@@ -1,9 +1,6 @@
 import * as React from 'react';
-import './checkbox.css'
-
 import { Context } from '../context';
 import  { useContext } from 'react';
-
 
 export default function CmdInput() {
   

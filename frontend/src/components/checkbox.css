@@ -1,7 +1,6 @@
-/* Style for the container label */
 .container {
-  display: flex; /* Use flexbox for alignment */
-  align-items: center; /* Vertically center-align the checkbox and text */
+  display: flex; 
+  align-items: center; 
   position: relative;
   padding-left: 35px; /* Space for the custom checkbox */
   margin-bottom: 12px;
@@ -25,13 +24,13 @@
 /* Style for the custom checkbox */
 .checkmark {
   position: absolute;
-  left: 0; /* Align the custom checkbox to the left of the text */
-  top: 50%; /* Vertically center it */
-  transform: translateY(-50%); /* Correct centering */
+  left: 0; 
+  top: 50%; 
+  transform: translateY(-50%);
   height: 15px;
   width: 15px;
   background-color: rgb(166, 166, 166);
-  border-radius: 3px; /* Add slight rounding for modern design */
+  border-radius: 3px; 
 }
 
 /* Change background on hover */
@@ -58,7 +57,7 @@
 
 /* Style the checkmark/indicator */
 .container .checkmark:after {
-  left: 5px; /* Adjust positioning inside the custom checkbox */
+  left: 5px;
   top: 1px;
   width: 4px;
   height: 8px;
