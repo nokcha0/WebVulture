@@ -11,15 +11,16 @@ export default function VerboseCheck() {
   return (
     <div className="checkContainer">
 
-      <label class="container"> Verbose
+    <label class="container"> Verbose
 
       <input type="checkbox"
       checked={isVerboseChecked}  // Set the checkbox checked state from context
       onChange={toggleVerboseCheckbox}  // Toggle the checkbox when changed
       />
-      <span class="checkmark"></span>
+      <span className="checkmark"></span>
 
-      </label>
+    </label>
+      
       
     </div>
   );

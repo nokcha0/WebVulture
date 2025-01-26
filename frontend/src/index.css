@@ -13,7 +13,10 @@ html, body {
 header {
   display: flex;
   font-family: 'Fira Sans', sans-serif;
-  height: 60px;
+  height: 150px;
+  align-items: center;
+  margin-top: 30px;
+  
 }
 
 .header-name-1 {
@@ -25,6 +28,16 @@ header {
   
 }
 
+.github-logo {
+  width: 40px;
+  margin-left: 170px;
+  filter: sepia(1) saturate(3) hue-rotate(5deg) brightness(0.7);
+}
+.github-logo:hover {
+  filter: sepia(1) saturate(3) hue-rotate(5deg) brightness(1);
+  transform: scale(1.1);
+}
+/*
 .header-name-2 {
   color:rgb(220, 222, 195);
   font-size: 6rem;
@@ -36,7 +49,7 @@ header {
 }
 
 
-/*
+
 .header-logo {
   max-height: 50px;
   max-width: 100%; 
@@ -46,14 +59,6 @@ header {
 }
 */
 
-.top-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 2rem;
-
-  margin-top: 200px;
-}
 
 .input-form {
   display: flex;
@@ -81,12 +86,14 @@ header {
   border-radius: 0.25rem;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  height: 42px;
 }
 
 .input-button-icon {
   filter: invert(1);
-  width: 18px;  
-  height: auto; 
+  width: 20px;
+  height:20px;  
+  padding:0;
 }
 
 .input-button:hover {
@@ -94,12 +101,53 @@ header {
   transform: scale(1.05);
 }
 
+.input-box{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sliderText {
+  font-family: "Fira sans", sans-serif;
+  color: rgb(255, 255, 255);
+  font-weight: 320;
+  font-size: 16px;
+  margin-left: 45px;
+  margin-bottom:0px;
+}
+
+.all-forms {
+  display: flex;
+  margin-top: 50px;
+  justify-content: center;
+  align-content: center;
+  gap: 100px;
+}
+
+.all-all-forms {
+  margin-top: 100px;
+}
+
+.slide-container{
+  display: flex;
+  flex-direction: column;
+}
+
+.check-container{
+  display: flex;
+  flex-direction: column;
+  margin-top: 31px;
+}
+
+.manual-input {
+  margin-top: 20px;
+}
 .page {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 50px;
-  margin-top: 350px;
+  margin-top: 240px;
   margin-bottom: 150px;
 }
 .summary-container {
@@ -185,7 +233,8 @@ header {
 
 .terminal-body {
   flex: 1;                 
-  overflow-y: auto;        
+  overflow-y: auto;
+  overflow-x: auto;        
   padding: 0.75rem;
   line-height: 1.4;
 }
@@ -209,3 +258,22 @@ header {
   background-color: #6d665a;     
 }
 
+.disclaimer-footer {
+  background-color: #181100;   
+  color: #d6d4be;             
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 1rem;
+}
+.disclaimer-title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.disclaimer-text,
+.disclaimer-note {
+  margin: 0.25rem 0;
+  line-height: 1.4;
+}

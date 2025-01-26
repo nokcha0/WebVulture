@@ -9,10 +9,11 @@ const ButtonComponent = () => {
 
   const { handleSend } = useContext(Context);
 
+  
   return (
-    <Button variant="contained" color="primary" onClick={handleSend}>
-      Click Me
-    </Button>
+  <button type="submit" className="input-button" onClick={handleSend}>
+    <img src="./src/images/arrowSubmit.png" alt="Submit" className="input-button-icon" />
+  </button>
   );
 };
 

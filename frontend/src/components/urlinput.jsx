@@ -11,16 +11,14 @@ export default function UrlInput() {
   const { urlValue, handleUrlChange } = useContext(Context);
 
     return (
-        <div className="top-container">
-            <form className="modern-form" >
+        <div >
             <input
                 type="text"
-                className="modern-input"
-                placeholder="Enter a URL..."
+                className="input"
+                placeholder="Enter a URL"
                 value={urlValue}
                 onChange={handleUrlChange}
             />
-            </form>
         </div>
     );
 

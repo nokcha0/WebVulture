@@ -9,17 +9,18 @@ export const ThreadSlide = (props) => {
 
   return (
     <div>
+      <p className="sliderText">Number of Threads: {threadValue}</p>
       <Slider
         aria-label="Number of Threads"
         defaultValue={1}
-        valueLabelDisplay="auto"
+        valueLabelDisplay="off"
         onChange={handleThreadChange}
         shiftStep={1}
         step={1}
         marks
         min={1}
         max={10}
-        sx={{ width: 300, left: 50, height: '10px', borderRadius: '0px',
+        sx={{ width: 400, left: 50, height: '10px', borderRadius: '0px',
 
         color: '#ff5733', // Change the color of the slider
         '& .MuiSlider-track': {
@@ -27,10 +28,11 @@ export const ThreadSlide = (props) => {
           //background: 'linear-gradient(to right,rgb(0, 255, 42),rgb(255, 0, 0))', // Gradient for the track
         },
         '& .MuiSlider-rail': {
-          background: 'linear-gradient(to right,rgb(0, 255, 0), rgb(255, 255, 0) ,rgb(255, 0, 0))',
+          background: 'rgb(166, 166, 166)',
           opacity: 1, // Background for the rail
-          border: '2px solid #162521',
+          border: '0px solid #162521',
           width: '100%',
+          borderRadius: '6px',
         },  
         '& .MuiSlider-thumb': {
           background: '#000000', // Gradient for the thumb
