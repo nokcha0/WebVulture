@@ -26,9 +26,9 @@ To test:
 To setup frontend:
 
 1. Make sure Node.js is installed (may require restart)
-2. . > npm create vite@latest client --template react
+2. . > npm create vite@latest frontend --template react
 3. Select React, then JS in terminal
-4. .\client\ > npm install
+4. .\frontend\ > npm install
 5. npm install axios
 
 To connect frontend with backend:
@@ -40,6 +40,6 @@ To connect frontend with backend:
 
 To run frontend:
 
-1. .\client > npm run dev
+1. .\frontend > npm run dev
 2. Make sure displayed port matches ports in origins in backend main.py
 3. Reload backend server if needed
