@@ -7,9 +7,27 @@ import React, { useContext } from 'react';
 
 export const AttackSlide = (props) => {
   const { attackValue, handleAttackChange } = useContext(Context);
+  var attackText = "Attack Level 1: Basic Scanning, Minimal Payloads"
+
+    if (attackValue === 1) {
+        attackText = "Attack Level 1: Basic Scanning, Minimal Payloads"
+    }
+    if (attackValue === 2) {
+        attackText = "Attack Level 2: Basic Scanning, Moderate Payloads"
+    }
+    if (attackValue === 3) {
+        attackText = "Attack Level 3: Balanced Intrusion"
+    }
+    if (attackValue === 4) {
+        attackText = "Attack Level 4: Aggressive Intrusion"
+    }
+    if (attackValue === 5) {
+        attackText = "Attack Level 5: Maximum Strength, High Risk"
+    }
 
   return (
     <div>
+      <p className="sliderText">{attackText}</p>
       <Slider
         aria-label="Attack Level"
         defaultValue={1}
@@ -28,10 +46,11 @@ export const AttackSlide = (props) => {
           //background: 'linear-gradient(to right,rgb(0, 255, 42),rgb(255, 0, 0))', // Gradient for the track
         },
         '& .MuiSlider-rail': {
-          background: 'linear-gradient(to right,rgb(0, 255, 0), rgb(255, 255, 0) ,rgb(255, 0, 0))',
+          background: 'linear-gradient(to right, #00CA4E, #FFBD44 , #FF605C)',
           opacity: 1, // Background for the rail
-          border: '2px solid #162521',
+          border: '0px solid #0f100f',
           width: '100%',
+          borderRadius: '6px',
         },  
         '& .MuiSlider-thumb': {
           background: '#000000', // Gradient for the thumb

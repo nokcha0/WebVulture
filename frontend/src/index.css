@@ -85,13 +85,23 @@ header {
 
 .input-button-icon {
   filter: invert(1);
-  width: 18px;  
-  height: auto; 
+  width: 20px;
+  height:20px;  
+  padding:0;
 }
 
 .input-button:hover {
   background-color: #7d7c78;
   transform: scale(1.05);
+}
+
+.sliderText {
+  font-family: "Fira sans", sans-serif;
+  color: rgb(255, 255, 255);
+  font-weight: 320;
+  font-size: 12px;
+  margin-left: 55px;
+  margin-bottom:0px;
 }
 
 .page {

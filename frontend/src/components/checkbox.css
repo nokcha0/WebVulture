@@ -1,11 +1,8 @@
-.checkContainer {
-
-}
-
 .checkText {
     display: inline-block;
     font-weight: 100;
     font-family: 'Fira Sans';
+    color: rgb(186, 186, 144);
 }
 
 /* Customize the label (the container) */
@@ -15,13 +12,15 @@
     padding-left: 35px;
     margin-bottom: 12px;
     cursor: pointer;
-    font-size: 22px;
+    color:rgb(255, 255, 255);
+    font-size: 20px;
+    height: 50%;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
     display: inline-block;
-    font-weight: 300;
+    font-weight: 320;
     font-family: 'Fira Sans';
   }
   
@@ -51,7 +50,7 @@ background-color: #ccc;
 
 /* When the checkbox is checked, add a blue background */
 .container input:checked ~ .checkmark {
-background-color: #2196F3;
+background-color: #0f100f;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */

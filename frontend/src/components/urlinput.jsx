@@ -15,8 +15,8 @@ export default function UrlInput() {
             <form className="modern-form" >
             <input
                 type="text"
-                className="modern-input"
-                placeholder="Enter a URL..."
+                className="input"
+                placeholder="Enter a URL"
                 value={urlValue}
                 onChange={handleUrlChange}
             />

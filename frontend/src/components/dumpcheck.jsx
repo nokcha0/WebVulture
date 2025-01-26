@@ -17,7 +17,7 @@ export default function VerboseCheck() {
       checked={isVerboseChecked}  // Set the checkbox checked state from context
       onChange={toggleVerboseCheckbox}  // Toggle the checkbox when changed
       />
-      <span class="checkmark"></span>
+      <span className="checkmark"></span>
 
       </label>
       

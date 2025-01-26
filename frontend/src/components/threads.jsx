@@ -9,6 +9,7 @@ export const ThreadSlide = (props) => {
 
   return (
     <div>
+      <p className="sliderText">Number of Threads: {threadValue}</p>
       <Slider
         aria-label="Number of Threads"
         defaultValue={1}
@@ -27,10 +28,11 @@ export const ThreadSlide = (props) => {
           //background: 'linear-gradient(to right,rgb(0, 255, 42),rgb(255, 0, 0))', // Gradient for the track
         },
         '& .MuiSlider-rail': {
-          background: 'linear-gradient(to right,rgb(0, 255, 0), rgb(255, 255, 0) ,rgb(255, 0, 0))',
+          background: 'rgb(255,255,255)',
           opacity: 1, // Background for the rail
-          border: '2px solid #162521',
+          border: '0px solid #162521',
           width: '100%',
+          borderRadius: '6px',
         },  
         '& .MuiSlider-thumb': {
           background: '#000000', // Gradient for the thumb

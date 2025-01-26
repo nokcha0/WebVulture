@@ -10,12 +10,12 @@ export default function CmdInput() {
   const { cmdValue, handleCmdChange } = useContext(Context);
 
     return (
-        <div className="top-container">
-            <form className="modern-form" >
+        <div >
+            <form >
             <input
                 type="text"
-                className="modern-input"
-                placeholder="Enter a manual command..."
+                className="input"
+                placeholder="Enter a manual command"
                 value={cmdValue}
                 onChange={handleCmdChange}
             />
