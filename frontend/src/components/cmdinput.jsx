@@ -11,7 +11,6 @@ export default function CmdInput() {
 
     return (
         <div >
-            <form >
             <input
                 type="text"
                 className="input"
