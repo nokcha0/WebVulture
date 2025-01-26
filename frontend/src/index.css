@@ -33,6 +33,10 @@ header {
   margin-left: 170px;
   filter: sepia(1) saturate(3) hue-rotate(5deg) brightness(0.7);
 }
+.github-logo:hover {
+  filter: sepia(1) saturate(3) hue-rotate(5deg) brightness(1);
+  transform: scale(1.1);
+}
 /*
 .header-name-2 {
   color:rgb(220, 222, 195);
@@ -55,14 +59,6 @@ header {
 }
 */
 
-.top-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 2rem;
-
-  margin-top: 100px;
-}
 
 .input-form {
   display: flex;
@@ -90,6 +86,7 @@ header {
   border-radius: 0.25rem;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  height: 42px;
 }
 
 .input-button-icon {
@@ -104,12 +101,18 @@ header {
   transform: scale(1.05);
 }
 
+.input-box{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .sliderText {
   font-family: "Fira sans", sans-serif;
   color: rgb(255, 255, 255);
   font-weight: 320;
-  font-size: 12px;
-  margin-left: 55px;
+  font-size: 16px;
+  margin-left: 45px;
   margin-bottom:0px;
 }
 
@@ -121,6 +124,10 @@ header {
   gap: 100px;
 }
 
+.all-all-forms {
+  margin-top: 100px;
+}
+
 .slide-container{
   display: flex;
   flex-direction: column;
@@ -129,6 +136,7 @@ header {
 .check-container{
   display: flex;
   flex-direction: column;
+  margin-top: 31px;
 }
 
 .manual-input {
@@ -139,7 +147,7 @@ header {
   align-items: center;
   justify-content: center;
   gap: 50px;
-  margin-top: 350px;
+  margin-top: 240px;
   margin-bottom: 150px;
 }
 .summary-container {
@@ -225,7 +233,8 @@ header {
 
 .terminal-body {
   flex: 1;                 
-  overflow-y: auto;        
+  overflow-y: auto;
+  overflow-x: auto;        
   padding: 0.75rem;
   line-height: 1.4;
 }

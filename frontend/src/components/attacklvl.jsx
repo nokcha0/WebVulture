@@ -31,14 +31,14 @@ export const AttackSlide = (props) => {
       <Slider
         aria-label="Attack Level"
         defaultValue={1}
-        valueLabelDisplay="auto"
+        valueLabelDisplay="off"
         onChange={handleAttackChange}
         shiftStep={1}
         step={1}
         marks
         min={1}
         max={5}
-        sx={{ width: 300, left: 50, height: '10px', borderRadius: '0px',
+        sx={{ width: 400, left: 50, height: '10px', borderRadius: '0px',
 
         color: '#ff5733', // Change the color of the slider
         '& .MuiSlider-track': {
@@ -52,6 +52,11 @@ export const AttackSlide = (props) => {
           width: '100%',
           borderRadius: '6px',
         },  
+
+        '&:focus, &:hover, &.Mui-focusVisible': {
+          boxShadow: 'none', // Remove the focus outline (blue glow)
+        },
+        
         '& .MuiSlider-thumb': {
           background: '#000000', // Gradient for the thumb
           boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.3)', // Optional glow

@@ -10,20 +10,24 @@ import ButtonComponent from '/src/components/sendbutton'
 export default function AllForms()
 {
     return (
-        <section className="all-forms">
-            <div className="slide-container">
-                <AttackSlide />
-                <ThreadSlide />
+        <div className="all-all-forms">
+            <div className="input-box">
+                <UrlInput/>
+                <ButtonComponent />
             </div>
-            <div className="check-container">
-                <FlushCheck />
-                <DumpCheck />
-                <CmdInput />
-            </div>
-
-            
-
-        </section>
+            <section className="all-forms">
+                <div className="slide-container">
+                    <AttackSlide />
+                    <ThreadSlide />
+                </div>
+                <div className="check-container">
+                    <FlushCheck />
+                    <DumpCheck />
+                    <CmdInput />
+                </div>
+            </section>  
+        </div>
     )
+
 
 }

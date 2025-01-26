@@ -11,8 +11,7 @@ export default function UrlInput() {
   const { urlValue, handleUrlChange } = useContext(Context);
 
     return (
-        <div className="top-container">
-            <form className="modern-form" >
+        <div >
             <input
                 type="text"
                 className="input"
@@ -20,7 +19,6 @@ export default function UrlInput() {
                 value={urlValue}
                 onChange={handleUrlChange}
             />
-            </form>
         </div>
     );
 

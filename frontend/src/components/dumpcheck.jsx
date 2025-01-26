@@ -11,7 +11,7 @@ export default function VerboseCheck() {
   return (
     <div className="checkContainer">
 
-      <label class="container"> Verbose
+    <label class="container"> Verbose
 
       <input type="checkbox"
       checked={isVerboseChecked}  // Set the checkbox checked state from context
@@ -19,7 +19,8 @@ export default function VerboseCheck() {
       />
       <span className="checkmark"></span>
 
-      </label>
+    </label>
+      
       
     </div>
   );
