@@ -39,7 +39,7 @@ header {
   display: flex;
   font-family: 'Fira Sans', sans-serif;
   height: 150px;
-  align-items: center;
+  justify-content: center;
   margin-top: 30px;
   
 }
@@ -49,31 +49,8 @@ header {
   font-size: 6rem;
   font-weight: 320;
   letter-spacing: 25px;
-  margin-left: 50px;
   
 }
-
-.github-logo {
-  width: 40px;
-  margin-left: 170px;
-  filter: sepia(1) saturate(3) hue-rotate(5deg) brightness(0.7);
-}
-.github-logo:hover {
-  filter: sepia(1) saturate(3) hue-rotate(5deg) brightness(1);
-  transform: scale(1.1);
-}
-/*
-.header-name-2 {
-  color:rgb(220, 222, 195);
-  font-size: 6rem;
-  font-weight: 820;
-  margin-top: 80px;
-  letter-spacing: 23px;
-  opacity: 0.0;
-  margin-left: -830px;
-}
-
-
 
 .header-logo {
   max-height: 50px;
@@ -82,7 +59,7 @@ header {
   margin-left: 10px;
   margin-right: 5px;
 }
-*/
+
 
 
 .input-form {
