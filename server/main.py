@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
+import webvulture
 
 class Button(BaseModel):
     clicked: bool
@@ -75,6 +76,10 @@ def print_summary():
 @app.post("/submitted", response_model = Button)
 def post_submit(submit: Button):
     memory_db["submitted"] = submit.clicked
+
+    webvulture.core(memory_db["urlValue"], memory_db["attackValue"], memory_db["threadValue"], memory_db["isFlushChecked"], 
+                    memory_db["isVerboseChecked"], memory_db["cmdValue"])
+
     return submit
 
 @app.post("/attackValue", response_model = Slider)
