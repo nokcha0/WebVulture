@@ -91,9 +91,10 @@ async def event_stream():
     while not memory_db["submitted"]:
         await asyncio.sleep(0.5)  # Wait for button click
 
-    memory_db["submitted"] = False  # Reset after starting the stream
 
     yield f"event: stream_event\ndata: Starting WebVulture...\n\n"
+    await asyncio.sleep(0.5) 
+    memory_db["submitted"] = False  # Reset after starting the stream
 
     input_url = memory_db["urlValue"]
     strength = memory_db["attackValue"]
@@ -110,7 +111,10 @@ async def event_stream():
 
 @app.get("/stream")
 async def stream():
-    return StreamingResponse(event_stream(), media_type="text/event-stream")
+        return StreamingResponse(event_stream(), media_type="text/event-stream", headers={
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive"
+    })
 
 @app.post("/attackValue", response_model=Slider)
 def post_attack(slider: Slider):
