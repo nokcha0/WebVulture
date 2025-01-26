@@ -12,7 +12,7 @@ export default function Terminal() {
             <p>Line 3</p>
             <p>Line 4</p>
             <p>Line 3</p>
-            <p>Line 4</p>
+            <p>Line ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd4</p>
             <p>Line 3</p>
             <p>Line 4</p>
             <p>Line 3</p>
