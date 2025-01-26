@@ -13,7 +13,10 @@ html, body {
 header {
   display: flex;
   font-family: 'Fira Sans', sans-serif;
-  height: 60px;
+  height: 150px;
+  align-items: center;
+  margin-top: 30px;
+  
 }
 
 .header-name-1 {
@@ -25,6 +28,12 @@ header {
   
 }
 
+.github-logo {
+  width: 40px;
+  margin-left: 170px;
+  filter: sepia(1) saturate(3) hue-rotate(5deg) brightness(0.7);
+}
+/*
 .header-name-2 {
   color:rgb(220, 222, 195);
   font-size: 6rem;
@@ -36,7 +45,7 @@ header {
 }
 
 
-/*
+
 .header-logo {
   max-height: 50px;
   max-width: 100%; 
@@ -52,7 +61,7 @@ header {
   align-items: flex-start;
   padding-top: 2rem;
 
-  margin-top: 200px;
+  margin-top: 100px;
 }
 
 .input-form {
@@ -209,3 +218,22 @@ header {
   background-color: #6d665a;     
 }
 
+.disclaimer-footer {
+  background-color: #181100;   
+  color: #d6d4be;             
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 1rem;
+}
+.disclaimer-title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.disclaimer-text,
+.disclaimer-note {
+  margin: 0.25rem 0;
+  line-height: 1.4;
+}
