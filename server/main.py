@@ -87,10 +87,13 @@ def post_submit(submit: Button):
 
 # SSE stream generator for scanning
 async def event_stream():
+
     while not memory_db["submitted"]:
         await asyncio.sleep(0.5)  # Wait for button click
 
     memory_db["submitted"] = False  # Reset after starting the stream
+
+    yield f"event: stream_event\ndata: Starting WebVulture...\n\n"
 
     input_url = memory_db["urlValue"]
     strength = memory_db["attackValue"]
@@ -98,6 +101,8 @@ async def event_stream():
     flush_session = memory_db["isFlushChecked"]
     verbose = memory_db["isVerboseChecked"]
     manual_command = memory_db["cmdValue"]
+
+    yield f"event: stream_event\ndata: Loading Scripts...\n\n"
 
     async for message in webvulture.core(input_url, strength, threads, flush_session, verbose, manual_command):
         print(message)

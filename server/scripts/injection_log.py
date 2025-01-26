@@ -55,8 +55,7 @@ def simplify_payload(log_text):
         formatted_result.append(f"Title: {item['title']}")
         formatted_result.append(f"Payload: {item['payload']}")
         formatted_result.append(f"Vector: {item['vector']}")
-        formatted_result.append("\nSimplified Payload:")
+        formatted_result.append("Simplified Payload:")
         formatted_result.extend(item["simplified_payload"])
-        formatted_result.append("")  
 
     return formatted_result 

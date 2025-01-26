@@ -111,9 +111,10 @@ async def process_targets(input_url, level, risk, threads, timeout, flush_sessio
     minutes, seconds = divmod(int(elapsed_time), 60)
 
     if injection_log:
+        yield("==== Vulnerability Found ====\n")
         injection_log = simplify_payload(injection_log)
 
-        if detected_info: injection_log.append(f"\n=== Extracted Server Information ===\n")
+        if detected_info: injection_log.append(f"=== Extracted Server Information ===\n")
         if detected_info["WEB_SERVER"]: injection_log.append(f"Web Server OS: {detected_info['WEB_SERVER']}")
         if detected_info["TECHNOLOGY"]: injection_log.append(f"Web App Tech: {detected_info['TECHNOLOGY']}")
         if detected_info["DBMS"]: injection_log.append(f"DBMS Type: {detected_info['DBMS']}")
@@ -121,8 +122,9 @@ async def process_targets(input_url, level, risk, threads, timeout, flush_sessio
 
         for log in injection_log:
             yield log
+        yield("=============================\n")
     else:
-        yield "\nNo Vulnerabilities detected."
+        yield "No Vulnerabilities detected."
 
 
 async def run_sqlmap(url, form, smart, level=5, risk=3, threads=10, referer="", cookie="",
@@ -180,8 +182,20 @@ async def run_sqlmap(url, form, smart, level=5, risk=3, threads=10, referer="", 
         if any(keyword in line for keyword in ["identified the following injection", "resumed the following injection point(s)"]): 
             capturing = True
 
-    await process.wait()
+        if "back-end DBMS could be " in line:
+            potential_DBMS = line.split("back-end DBMS could be '")[1].split("'")[0]
+        elif "web server operating system" in line:
+            detected_info["WEB_SERVER"] = line.split(": ", 1)[1].strip() if ": " in line else line.strip()
+        elif "web application technology" in line:
+            detected_info["TECHNOLOGY"] = line.split(": ", 1)[1].strip() if ": " in line else line.strip()
+        elif "back-end dbms" in line:
+            detected_info["DBMS"] = line.split(": ", 1)[1].strip() if ": " in line else line.strip()
+        elif "the back-end DBMS is" in line:
+            detected_info["DBMS"] = line.split("the back-end DBMS is", 1)[1].strip()
+
     yield f"\nScan for {url} completed."
+
+    await process.wait()
 
 def ensure_url_scheme(url):
     parsed_url = urlparse(url)
