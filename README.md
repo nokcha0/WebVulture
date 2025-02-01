@@ -1,3 +1,6 @@
+## DEMO
+https://youtu.be/oK-saO5h9wY
+
 ## Inspiration
 Current SQL injection tools, such as sqlmap, are CLI-based and require technical expertise, including integration with tools like Burp Suite. They are not so intuitive and require manual separation of forms and queries, making pentesting less accessible. WEBVULTURE addresses these challenges with enhanced features and a user-friendly approach, offering automated crawling, bot detection avoidance, and comprehensive attack surface identification to streamline the process and minimize manual effort.
 
